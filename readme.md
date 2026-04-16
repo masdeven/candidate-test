@@ -1,6 +1,6 @@
 # Beam Analysis Calculator Assignment
 
-**🔗 Demo Aplikasi:** [calculator-test-demo.pages.dev](https://pages.dev)
+**🔗 Demo Aplikasi:** [calculator-test-demo.pages.dev](https://calculator-test-demo.pages.dev)
 
 ---
 
