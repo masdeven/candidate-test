@@ -3,70 +3,223 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beam Analysis Plot</title>
+    <title>Beam Analysis Tool</title>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-hover: #1d4ed8;
+        --bg-color: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #1e293b;
+        --border-color: #e2e8f0;
+      }
+
+      body {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .container {
+        max-width: 900px;
+        width: 100%;
+      }
+
+      h2 {
+        text-align: center;
+        color: var(--primary-color);
+        margin-bottom: 25px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #64748b;
+      }
+
+      input,
+      select {
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .unit {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        margin-left: 5px;
+      }
+
+      .button-container {
+        margin-top: 25px;
+        text-align: center;
+      }
+
+      button {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        width: 100%;
+      }
+
+      button:hover {
+        background-color: var(--primary-hover);
+      }
+
+      /* Plot Section */
+      .plot-container {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .plot-card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+      }
+
+      .plot-card h4 {
+        margin: 0 0 10px 0;
+        font-size: 0.9rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      canvas {
+        width: 100% !important;
+        height: auto !important;
+        background: #fff;
+      }
+    </style>
   </head>
   <body>
-    <form>
-      <table>
-        <tr>
-          <td>Condition</td>
-          <td>
-            <select name="condition" id="condition">
-              <option value="simply-supported">Simply Supported</option>
-              <option value="two-span-unequal">Two Span Unequal</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td>Load Force (w)</td>
-          <td><input type="text" id="w" /> kN/m</td>
-        </tr>
-        <tr>
-          <td>Primary Span (L1)</td>
-          <td><input type="text" id="primarySpan" value="4" /> m</td>
-        </tr>
-        <tr>
-          <td>Secondary Span (L2)</td>
-          <td><input type="text" id="secondarySpan" value="" /> m</td>
-        </tr>
-        <tr>
-          <td colspan="2"><hr /></td>
-        </tr>
-        <tr>
-          <td>j2</td>
-          <td><input type="text" id="j2" value="2" /></td>
-        </tr>
-        <tr>
-          <td>Bending Stiffnes (EI)</td>
-          <td>
-            <input type="text" id="EI" value="3150000000000" /> Nmm<sup>2</sup>
-          </td>
-        </tr>
+    <div class="container">
+      <h2>Structural Beam Analysis</h2>
 
-        <tr>
-          <td colspan="2"><hr /></td>
-        </tr>
+      <div class="card">
+        <form id="analysisForm">
+          <div class="form-grid">
+            <div class="input-group">
+              <label for="condition">Loading Condition</label>
+              <select name="condition" id="condition">
+                <option value="simply-supported">Simply Supported</option>
+                <option value="two-span-unequal">Two Span Unequal</option>
+              </select>
+            </div>
 
-        <tr>
-          <td colspan="2" style="text-align: center">
-            <button type="button" id="calculate">Calculate</button>
-          </td>
-        </tr>
-      </table>
-    </form>
-    <canvas id="shear_force_plot"></canvas>
-    <canvas id="bending_moment_plot"></canvas>
-    <canvas id="deflection_plot"></canvas>
+            <div class="input-group">
+              <label for="w"
+                >Load Force (w) <span class="unit">kN/m</span></label
+              >
+              <input type="number" id="w" placeholder="e.g. 10" step="any" />
+            </div>
+
+            <div class="input-group">
+              <label for="primarySpan"
+                >Primary Span (L1) <span class="unit">m</span></label
+              >
+              <input type="number" id="primarySpan" value="4" step="any" />
+            </div>
+
+            <div class="input-group">
+              <label for="secondarySpan"
+                >Secondary Span (L2) <span class="unit">m</span></label
+              >
+              <input
+                type="number"
+                id="secondarySpan"
+                placeholder="0"
+                step="any"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="j2">Parameter (j2)</label>
+              <input type="number" id="j2" value="2" />
+            </div>
+
+            <div class="input-group">
+              <label for="EI"
+                >Bending Stiffness (EI) <span class="unit">Nmm²</span></label
+              >
+              <input type="text" id="EI" value="3150000000000" />
+            </div>
+          </div>
+
+          <div class="button-container">
+            <button type="button" id="calculate">Run Analysis</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="plot-container">
+        <div class="plot-card">
+          <h4>Shear Force Diagram (SFD)</h4>
+          <canvas id="shear_force_plot"></canvas>
+        </div>
+        <div class="plot-card">
+          <h4>Bending Moment Diagram (BMD)</h4>
+          <canvas id="bending_moment_plot"></canvas>
+        </div>
+        <div class="plot-card">
+          <h4>Deflection Profile</h4>
+          <canvas id="deflection_plot"></canvas>
+        </div>
+      </div>
+    </div>
 
     <script src="js/beam-analysis.js"></script>
     <script src="js/analysis-plotter.js"></script>
 
     <script>
-      /**
-       * Get float value of specified field
-       */
       function floatVal(id) {
-        return parseFloat(document.getElementById(id).value);
+        const val = document.getElementById(id).value;
+        return parseFloat(val) || 0;
       }
 
       function stringVal(id) {
@@ -75,41 +228,37 @@
 
       document
         .getElementById("calculate")
-        .addEventListener("click", function (e) {
-          var beam = new Beam();
+        .addEventListener("click", function () {
+          // Pastikan class Beam, Material, dll sudah ter-load dari script eksternal
+          try {
+            var beam = new Beam();
+            beam.primarySpan = floatVal("primarySpan");
+            beam.secondarySpan = floatVal("secondarySpan");
+            beam.material = new Material("No Name", {
+              EI: floatVal("EI"),
+            });
 
-          beam.primarySpan = floatVal("primarySpan");
-          beam.secondarySpan = floatVal("secondarySpan");
-          beam.material = new Material("No Name", {
-            EI: floatVal("EI"),
-          });
+            var plotter = {
+              deflection: new AnalysisPlotter("deflection_plot"),
+              shearForce: new AnalysisPlotter("shear_force_plot"),
+              bendingMoment: new AnalysisPlotter("bending_moment_plot"),
+            };
 
-          var plotter = {
-            deflection: new AnalysisPlotter("deflection_plot"),
-            shearForce: new AnalysisPlotter("shear_force_plot"),
-            bendingMoment: new AnalysisPlotter("bending_moment_plot"),
-          };
+            var beamAnalysis = new BeamAnalysis();
+            var cond = stringVal("condition");
+            var w = floatVal("w");
 
-          var beamAnalysis = new BeamAnalysis();
-          var deflectionData = beamAnalysis.getDeflection(
-            beam,
-            floatVal("w"),
-            stringVal("condition"),
-          );
-          var bendingMomentData = beamAnalysis.getBendingMoment(
-            beam,
-            floatVal("w"),
-            stringVal("condition"),
-          );
-          var shearForceData = beamAnalysis.getShearForce(
-            beam,
-            floatVal("w"),
-            stringVal("condition"),
-          );
-
-          plotter.deflection.plot(deflectionData);
-          plotter.shearForce.plot(shearForceData);
-          plotter.bendingMoment.plot(bendingMomentData);
+            plotter.deflection.plot(beamAnalysis.getDeflection(beam, w, cond));
+            plotter.shearForce.plot(beamAnalysis.getShearForce(beam, w, cond));
+            plotter.bendingMoment.plot(
+              beamAnalysis.getBendingMoment(beam, w, cond),
+            );
+          } catch (err) {
+            console.error("Error during calculation:", err);
+            alert(
+              "Please check your inputs and ensure analysis scripts are loaded.",
+            );
+          }
         });
     </script>
   </body>
