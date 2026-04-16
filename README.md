@@ -1,3 +1,3 @@
-### Expected Result
+### Result
 
 ![Result](images/result.png)
