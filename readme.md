@@ -9,30 +9,30 @@
 ### 1. Simply Supported Analysis
 
 - **Shear Force Plot:**
-  ![Shear Force Plot](shear-force-plot.png)
+  ![Shear Force Plot](images/shear-force-plot.png)
 - **Bending Moment Plot:**
-  ![Bending Moment Plot](bending-moment-plot.png)
+  ![Bending Moment Plot](images/bending-moment-plot.png)
 - **Deflection Plot:**
-  ![Deflection Plot](deflection-plot.png)
+  ![Deflection Plot](images/deflection-plot.png)
 
 ---
 
 ### 2. Two Span Unequal Analysis
 
 - **Shear Force Plot:**
-  ![Shear Force Plot](two-span-unequal-shear-plot.png)
+  ![Shear Force Plot](images/two-span-unequal-shear-plot.png)
 - **Bending Moment Plot:**
-  ![Bending Moment Plot](two-span-unequal-bending-plot.png)
+  ![Bending Moment Plot](images/two-span-unequal-bending-plot.png)
 - **Deflection Plot:**
-  ![Deflection Plot](two-span-unequal-deflection-plot.png)
+  ![Deflection Plot](images/two-span-unequal-deflection-plot.png)
 
 ---
 
 ### 3. When $L_1 = L_2$ Analysis
 
 - **Shear Force Plot:**
-  ![Shear Force Plot](two-span-equal-shear-plot.png)
+  ![Shear Force Plot](images/two-span-equal-shear-plot.png)
 - **Bending Moment Plot:**
-  ![Bending Moment Plot](two-span-equal-bending-plot.png)
+  ![Bending Moment Plot](images/two-span-equal-bending-plot.png)
 - **Deflection Plot:**
-  ![Deflection Plot](two-span-equal-deflection-plot.png)
+  ![Deflection Plot](images/two-span-equal-deflection-plot.png)
